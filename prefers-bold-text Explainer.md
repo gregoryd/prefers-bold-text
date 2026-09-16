@@ -47,7 +47,7 @@ This explainer proposes a new user preference media query, prefers-bold-text, al
 ## **Use Cases**
 
 1. **Adaptive Font Weights:** A user has enabled "Bold Text" in their OS accessibility settings. A news website detects this via @media (prefers-bold-text: bold) and increases its base body text weight from 400 to 700, ensuring the article is readable for that user.  
-2. **Variable Font Optimization:** A site uses a variable font. When prefers-bold-text is active, the developer seamlessly shifts the weight and GRAD axes to provide a thicker, more legible text stroke without breaking the layout.  
+2. **Variable Font Optimization:** A site uses a variable font. When prefers-bold-text is active, the developer seamlessly shifts the weight and/or the grade (GRAD) axes to provide a thicker, more legible text stroke. Unlike altering weight, modifying grade does not affect the text's overall width or spacing, preventing unwanted changes to line breaks or page layout.  
 3. **Alternative Font Families:** A website relies on a very thin, stylized display font for headings (e.g., font-weight: 200). Because simply bolding this specific font makes it look muddy, the developer uses the media query to swap it out for a robust, highly legible sans-serif alternative.
 
 ## **Existing Implementations and Behavior**
