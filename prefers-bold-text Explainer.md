@@ -177,13 +177,6 @@ While WCAG is intentionally OS-agnostic and does not mandate OS-level bold text 
    * **Orthogonal to other `prefers-\*` queries**: Unlike color and contrast media queries, which interact to create a complex multi-palette testing matrix, font weight and `GRAD` adjustments are completely independent of color scheme, motion, or transparency, allowing standalone implementation and testing.
    * **Framework multiplier**: Once component libraries (Material Design, Tailwind, Bootstrap, CMS themes) update their default token scales, downstream sites inherit support automatically.
 
- 
-
- 
-
-&#x20;    \&nbsp;
-
-
 ## **Privacy and Security Considerations**
 
 Like all user preference media queries ([prefers-color-scheme](http://prefers-color-scheme), [prefers-reduced-motion](http://prefers-reduced-motion)), exposing this setting adds a minor bit of entropy to the user's fingerprinting surface. However, because system-level bold text is a mainstream legibility preference used by a vast demographic (including roughly 13% of iOS users), its identifying entropy is low. Also, it’s important to note that since this is such a popular preference, it does not uniquely identify a clinical disability.
