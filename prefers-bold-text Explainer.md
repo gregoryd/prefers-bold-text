@@ -121,6 +121,10 @@ body {
   }  
 }
 
+### Authoring Guidance: Relative Weight Scaling & Preserving Hierarchy
+OS "Bold Text" settings represent a **relative increase** in stroke weight rather than setting all text on a page to a single fixed weight (`700`). To preserve visual hierarchy between body copy, medium UI labels, and bold headings or `<strong>` emphasis, authors should shift weights up proportionally, following the model described in [CSS Fonts Level 4 `bolder`](https://drafts.csswg.org/css-fonts-4/#relative-weights).
+For **Variable fonts (`GRAD` axis)** authors should increase `'GRAD'` (e.g., `+100` to `+150`), which thickens strokes across all weights while keeping relative weight hierarchy and character widths unchanged.
+
 ## **Alternatives Considered**
 
 * Using [**webkit-text-stroke-width**](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/-webkit-text-stroke-width)**:** webkit-text-stroke is a stylistic tool and is notoriously poor for general legibility, as it draws the stroke inside/outside the glyph paths in ways that often close up the counters (the empty spaces inside letters like 'e' and 'o'), reducing legibility rather than improving it.
@@ -155,6 +159,8 @@ A key takeaway from that rollout was **adoption order**: owners of high-traffic 
 * **Step 1 — Granular Developer Control**: Like `env(preferred-text-scale)`, `@media (prefers-bold-text)` ships first as the foundational standard, giving developers direct CSS control over font weights, variable font `GRAD` axes, font families, and non-DOM assets (`<canvas>`, SVG) without risking layout breakage.
 * **Step 2 — Declarative Opt-In (`<meta name="text-bold">` vs. `<meta name="text-scale">`)**: A declarative `<meta name="text-bold" content="bold">` tag (or CSS property like `font-bold-adjust: auto`) can follow in a future revision as a low-effort opt-in for content-heavy sites with simpler layouts, once developers already have the media query to refine and override edge cases.
 
+**Co-occurrence with Text Scaling and WCAG 2.2 Reflow ([1.4.4](https://www.w3.org/TR/WCAG22/#resize-text), [1.4.10](https://www.w3.org/TR/WCAG22/#reflow), [1.4.12](https://www.w3.org/TR/WCAG22/#text-spacing))**: Users who enable Bold Text often also enable OS Large Text. `@media (prefers-bold-text)` composes cleanly with `<meta name="text-scale" content="scale">` and `env(preferred-text-scale)`. While increasing `font-weight` expands proportional text width by less than 10%, authors should test `prefers-bold-text: bold` alongside 200% text scaling to ensure layouts continue to meet WCAG requirements.
+
 ## **Preventing "Double-Bolding" When Combining Both Tiers** {#preventing-"double-bolding"-when-combining-both-tiers}
 
 If an author uses `@media (prefers-bold-text: bold)` to bump body text from `400` to `600`, a future auto-bolding mechanism must not add additional weight on top of that `600`. We define the forward-compatibility rules now:
@@ -168,7 +174,7 @@ If an author uses `@media (prefers-bold-text: bold)` to bump body text from `400
 
 While WCAG is intentionally OS-agnostic and does not mandate OS-level bold text support, four strong industry drivers incentivize web developer adoption:
 
-1. **Statutory Accessibility Compliance (Section 508 \& EN 301 549)**: Unlike WCAG, **U.S. Section 508 (§ 503.2)** and **European Standard EN 301 549 (V4.1.1, Clause 9.7, "User preferences")** explicitly require software to respect platform-level settings for font size, font type/legibility, color, and contrast. Under these requirements, once browsers expose an OS preference via a standard CSS API (as happened with `prefers-reduced-motion` and `prefers-contrast`), honoring it becomes an actionable compliance expectation for public-sector and enterprise web applications.
+1. **Statutory Accessibility Compliance (Section 508 \& EN 301 549)**: Unlike WCAG, **U.S. Section 508 (§ 503.2)** and **European Standard EN 301 549 ([V4.1.1, Clause 9.7, "User preferences"](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/04.01.01_60/en_301549v040101p.pdf))** explicitly require software to respect platform-level settings for font size, font type/legibility, color, and contrast. Under these requirements, once browsers expose an OS preference via a standard CSS API (as happened with `prefers-reduced-motion` and `prefers-contrast`), honoring it becomes an actionable compliance expectation for public-sector and enterprise web applications.
 2. **Parity Across Hybrid Apps, WebViews, and App Store Labels**: Modern mobile apps frequently mix native views (SwiftUI, Jetpack Compose) with embedded web surfaces (`WKWebView`, Android `WebView`, and PWAs). When OS Bold Text is enabled, thin WebViews inside an otherwise bold native app look broken to users. Furthermore, Apple's **App Store Accessibility Nutrition Labels** explicitly highlight whether an app supports **Bold Text**; exposing `prefers-bold-text` allows hybrid and WebView-based apps to achieve full platform parity and qualify for these badges.
 3. **Proven Demand for `prefers-\*` Media Features**: Given the mainstream adoption of OS Bold Text (13% on iOS, 5.2% on Android), aligning with this preference reduces visual fatigue and improves retention - the same product incentives that drove widespread voluntary adoption of `@media (prefers-color-scheme)`.
 4. **Minimal Implementation Cost via Design Tokens**:
